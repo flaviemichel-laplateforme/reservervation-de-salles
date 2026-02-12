@@ -1,11 +1,10 @@
-// models/user.model.js
 import { query } from '../config/db.js';
 
 const CreateReservation = {
     // Trouver par email
     async checkConflit(date_resa, heure_debut, heure_fin) {
-        const sql = '-SELECT id FROM reservations WHERE date_resa = ? AND (heure_debut < ? AND heure_fin > ?';
-        const row = await query(sql, [date_resa, heure_debut, heure_fin]);
+        const sql = 'SELECT id FROM reservations WHERE date_resa = ? AND (heure_debut < ? AND heure_fin > ?)';
+        const rows = await query(sql, [date_resa, heure_debut, heure_fin]);
         return rows.length > 0;
     },
 
@@ -14,7 +13,7 @@ const CreateReservation = {
 
         const sql = `INSERT INTO reservations (user_id, date_resa, heure_debut, heure_fin, objet)
 VALUES (?, ?, ?, ?,?)`;
-        const [result] = await query(sql, [
+        const result = await query(sql, [
             user_id,
             date_resa,
             heure_debut,

@@ -1,4 +1,3 @@
-import User from '../models/user.model.js';
 import CreateReservation from '../models/reservation.model.js';
 
 
@@ -29,7 +28,7 @@ export const createReservation = async (req, res) => {
         // D. Durée min 1h
 
         const getMinutes = (timeStr) => {
-            const [H, h] = timeStr.split(':').map(number);
+            const [h, m] = timeStr.split(':').map(Number);
             return h * 60 + m;
         };
 
@@ -46,23 +45,23 @@ export const createReservation = async (req, res) => {
         }
 
         // On appelle directement la fonction importée
-        const hasConflict = await checkConflict(date_resa, heure_debut, heure_fin);
+        const hasConflict = await CreateReservation.checkConflit(date_resa, heure_debut, heure_fin);
 
         if (hasConflict) {
             return res.status(409).json({ message: "Créneau indisponible (conflit)." });
         }
 
-        const newId = await createResa({
-            userId,
-            dateResa: date_resa,
-            heureDebut: heure_debut,
-            heureFin: heure_fin,
+        const newId = await CreateReservation.createResa({
+            user_id: userId,
+            date_resa,
+            heure_debut,
+            heure_fin,
             objet
         });
 
         res.status(201).json({
             id: newId,
-            message: "Réservation réalisé avec succès"
+            message: "Réservation réalisée avec succès"
         });
 
     } catch (error) {
