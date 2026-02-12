@@ -19,7 +19,7 @@ const User = {
     async create({ email, password, prenom, nom }) {
         const hashedPassword = await bcrypt.hash(password, 10);
         const sql = `
-INSERT INTO users (email, password, prenom, nom)
+INSERT INTO utilisateurs (email, password, prenom, nom)
 VALUES (?, ?, ?, ?)
 `;
         const result = await query(sql, [

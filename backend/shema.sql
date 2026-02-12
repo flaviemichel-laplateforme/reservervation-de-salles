@@ -1,27 +1,49 @@
--- schema.sql
-CREATE DATABASE IF NOT EXISTS starter_kit
-CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+============================================================
+-- SCRIPT D'INITIALISATION DE LA BASE DE DONNÉES : TECHSPACE
+-- Date : 2026-02-09
+-- ============================================================
 
-USE starter_kit;
+-- 1. CRÉATION DE LA BASE DE DONNÉES
+-- On supprime l'ancienne si elle existe pour repartir de zéro (DEV ONLY)
+DROP DATABASE IF EXISTS techspace_db;
 
-CREATE TABLE IF NOT EXISTS users (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    firstname VARCHAR(100) NOT NULL,
-    lastname VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_email (email)
+CREATE DATABASE techspace_db
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE techspace_db;
+
+-- ============================================================
+-- 2. CRÉATION DES TABLES
+-- ============================================================
+
+-- Table : UTILISATEURS
+CREATE TABLE UTILISATEURS (
+id INT AUTO_INCREMENT PRIMARY KEY,
+nom VARCHAR(50) NOT NULL,
+prenom VARCHAR(50) NOT NULL,
+email VARCHAR(100) NOT NULL UNIQUE,
+password VARCHAR(255) NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Table des réservations (ajoutée selon votre cahier des charges)
-CREATE TABLE IF NOT EXISTS reservations (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    user_id INT UNSIGNED NOT NULL,
-    date_resa DATE NOT NULL,
-    heure_debut TIME NOT NULL,
-    heure_fin TIME NOT NULL,
-    objet VARCHAR(255) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+-- Table : RESERVATIONS
+CREATE TABLE RESERVATIONS (
+id INT AUTO_INCREMENT PRIMARY KEY,
+user_id INT NOT NULL,
+date_resa DATE NOT NULL,
+heure_debut TIME NOT NULL,
+heure_fin TIME NOT NULL,
+objet VARCHAR(255) NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+-- Contrainte de Clé Étrangère
+CONSTRAINT fk_reservation_user
+    FOREIGN KEY (user_id) 
+    REFERENCES UTILISATEURS(id)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE
+
 ) ENGINE=InnoDB;
+
+-- 
