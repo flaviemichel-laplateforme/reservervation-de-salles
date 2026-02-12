@@ -1,5 +1,6 @@
 // services/api.js
 const API_URL = 'http://localhost:5000/api';
+
 async function fetchAPI(endpoint, options = {}) {
     const token = localStorage.getItem('token');
     const headers = {
