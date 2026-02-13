@@ -1,8 +1,5 @@
 import { CreateReservation, DeleteReservation } from '../models/reservation.model.js';
 
-
-
-
 export const createReservation = async (req, res) => {
     try {
         const userId = req.user.id;

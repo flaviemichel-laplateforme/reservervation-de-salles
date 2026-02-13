@@ -45,11 +45,9 @@ VALUES (?, ?, ?, ?,?)`;
 
 
 };
-export default CreateReservation;
-
 
 const DeleteReservation = {
-    async deleteById({ id, user_id }) {
+    async deleteById(id, user_id) {
         const sql = `DELETE FROM reservations WHERE id = ? AND user_id = ?`;
 
         try {
@@ -61,3 +59,5 @@ const DeleteReservation = {
         }
     }
 };
+
+export { CreateReservation, DeleteReservation };
