@@ -25,18 +25,6 @@ VALUES (?, ?, ?, ?,?)`;
         return result.insertId;// Retourne l'ID créé
     },
 
-    async deleteResa({ id, user_id }) {
-        const sql = `DELETE FROM reservations WHERE id = ? AND user_id = ?`;
-
-        try {
-            const result = await query(sql, [id, user_id]);
-            return result.affectedRows;
-        } catch (error) {
-            console.error("Erreur lors de la suppression :", error);
-            throw error;
-        }
-    },
-
     async findAll() {
         const sql = `
         SELECT
@@ -58,3 +46,18 @@ VALUES (?, ?, ?, ?,?)`;
 
 };
 export default CreateReservation;
+
+
+const DeleteReservation = {
+    async deleteById({ id, user_id }) {
+        const sql = `DELETE FROM reservations WHERE id = ? AND user_id = ?`;
+
+        try {
+            const result = await query(sql, [id, user_id]);
+            return result.affectedRows;
+        } catch (error) {
+            console.error("Erreur lors de la suppression :", error);
+            throw error;
+        }
+    }
+};

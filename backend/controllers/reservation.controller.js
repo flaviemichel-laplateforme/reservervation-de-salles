@@ -1,4 +1,4 @@
-import CreateReservation from '../models/reservation.model.js';
+import { CreateReservation, DeleteReservation } from '../models/reservation.model.js';
 
 
 
@@ -53,8 +53,6 @@ export const createReservation = async (req, res) => {
 
         }
 
-
-
         const newId = await CreateReservation.createResa({
             user_id: userId,
             date_resa,
@@ -67,6 +65,8 @@ export const createReservation = async (req, res) => {
             id: newId,
             message: "Réservation réalisée avec succès"
         });
+
+
 
     } catch (error) {
         console.error("Erreur Controller:", error);
@@ -85,5 +85,29 @@ export const getAllReservations = async (req, res) => {
     } catch (error) {
         console.error("Erreur Controller GetAll:", error);
         res.status(500).json({ message: "Erreur lors de la récupération du planning." });
+    }
+};
+
+export const deleteResa = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const reservationId = req.params.id;
+
+        if (!reservationId) {
+            return res.status(400).json({ message: "ID de réservation manquant." });
+        }
+        // Appel au modèle
+        const affectedRows = await DeleteReservation.deleteById(reservationId, userId);
+
+        if (affectedRows === 0) {
+            // Si 0 ligne supprimée, c'est soit que la résa n'existe pas, 
+            // soit qu'elle n'appartient pas à cet utilisateur.
+            return res.status(404).json({ message: "Réservation introuvable ou non autorisée." });
+        }
+        // 200 OK (ou 204 No Content)
+        res.status(200).json({ message: "Réservation annulée avec succès." });
+    } catch (error) {
+        console.error("Erreur Controller Delete:", error);
+        res.status(500).json({ message: "Erreur serveur lors de l'annulation." });
     }
 };
