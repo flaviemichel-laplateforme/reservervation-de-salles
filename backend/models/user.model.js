@@ -15,6 +15,7 @@ const User = {
         const results = await query(sql, [id]);
         return results[0] || null;
     },
+
     // Créer un utilisateur
     async create({ email, password, prenom, nom }) {
         const hashedPassword = await bcrypt.hash(password, 10);
