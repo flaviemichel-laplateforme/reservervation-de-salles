@@ -8,24 +8,38 @@ import Home from './pages/Home/Home.jsx';
 import Login from './pages/Login/Login.jsx';
 import Register from './pages/Register/Register.jsx';
 import Dashboard from './pages/Dashboard/Dashboard.jsx';
+import Planning from './pages/Planning/Planning.jsx';
+import Profile from './pages/Profile/Profile.jsx';
+
 function App() {
   const { loading } = useAuth();
   if (loading) return <div><p>Chargement...</p></div>;
   return (
+
     <Routes>
+
       {/* Routes AVEC Header + Footer */}
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={
           <PrivateRoute><Dashboard /></PrivateRoute>
         } />
+        <Route path="/planning" element={
+          <PrivateRoute><Planning /></PrivateRoute>
+        } />
+        <Route path="/profile" element={
+          <PrivateRoute><Profile /></PrivateRoute>
+        } />
+
       </Route>
+
       {/* Routes SANS Header (plein écran) */}
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
+
     </Routes>
   );
 }

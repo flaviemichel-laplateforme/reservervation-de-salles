@@ -1,6 +1,7 @@
 // components/Header.jsx
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
+
 function Header() {
     const { user, isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ function Header() {
             <div>
                 {isAuthenticated ? (
                     <>
-                        <span>{user?.firstname}</span>
+                        <span>{user?.prenom}</span>
                         <button onClick={handleLogout}>Déconnexion</button>
                     </>
                 ) : (
