@@ -60,4 +60,41 @@ const DeleteReservation = {
     }
 };
 
-export { CreateReservation, DeleteReservation };
+
+const UpdateReservation = {
+
+
+    async findById(id) {
+
+        const sql = 'SELECT * FROM reservations WHERE id = ?';
+        const results = await query(sql, [id]);
+        return results[0] || null;
+    },
+
+    async checkConflictForUpdate(date_resa, heure_debut, heure_fin, idToExclude) {
+
+        const sql = 'SELECT id FROM reservations WHERE date_resa = ? AND (heure_debut < ? AND heure_fin > ?) AND id != ? --';
+        const rows = await query(sql, [date_resa, heure_fin, heure_debut, idToExclude]);
+        return rows.length > 0;
+
+    },
+
+    // Créer une reservation
+    async update(id, { date_resa, heure_debut, heure_fin, objet }) {
+
+        const sql = `UPDATE reservations SET date_resa = ? , heure_debut = ? , heure_fin = ?, objet = ? WHERE id = ?`;
+        const result = await query(sql, [
+
+            date_resa,
+            heure_debut,
+            heure_fin,
+            objet,
+            id
+        ]);
+        return result.affectedRows;// Retourne le nombre de lignes modifiées.
+    },
+};
+
+
+export { CreateReservation, DeleteReservation, UpdateReservation };
+

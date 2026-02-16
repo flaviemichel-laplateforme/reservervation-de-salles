@@ -1,4 +1,4 @@
-import { CreateReservation, DeleteReservation } from '../models/reservation.model.js';
+import { CreateReservation, DeleteReservation, UpdateReservation } from '../models/reservation.model.js';
 
 export const createReservation = async (req, res) => {
     try {
@@ -108,3 +108,4 @@ export const deleteResa = async (req, res) => {
         res.status(500).json({ message: "Erreur serveur lors de l'annulation." });
     }
 };
+
