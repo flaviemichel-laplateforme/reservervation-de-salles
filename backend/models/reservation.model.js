@@ -63,7 +63,12 @@ VALUES (?, ?, ?, ?,?)`;
 
     },
 
-    // Mise à jour réservation 
+    /**
+     * 
+     * @param {id } 
+     * @param {date_resa, heure_debut, heure_fin, objet} param1 
+     * @returns result.affectedRows
+     */
     async update(id, { date_resa, heure_debut, heure_fin, objet }) {
 
         const sql = `UPDATE reservations SET date_resa = ? , heure_debut = ? , heure_fin = ?, objet = ? WHERE id = ?`;
