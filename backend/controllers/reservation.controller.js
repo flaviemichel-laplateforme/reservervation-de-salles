@@ -110,16 +110,16 @@ export const deleteResa = async (req, res) => {
     }
 };
 
-export const UpdateResa = async (req, res) => {
+export const updateResa = async (req, res) => {
 
     try {
         const userId = req.user.id;
         const reservationId = req.params.id;
-        const { date_resa, heure_debut, heure_fin, objet } = req.bodyc;
+        const { date_resa, heure_debut, heure_fin, objet } = req.body;
 
-        const existingResa = await findById(reservationId);
+        const existingResa = await UpdateReservation.findById(reservationId);
         if (!existingResa) return res.status(404).json({ message: "Introuvable" });
-        if (!existingResa.user_id !== userId) return res.status(403).json({ message: "Non autorisé" });
+        if (existingResa.user_id !== userId) return res.status(403).json({ message: "Non autorisé" });
 
         const errorMsg = validateReservationRules(date_resa, heure_debut, heure_fin, objet);
         if (errorMsg) {
@@ -127,7 +127,7 @@ export const UpdateResa = async (req, res) => {
         }
         // --- C. Conflit "Intelligent" (Spécifique Update) ---
         // On utilise la nouvelle fonction qui exclut l'ID actuel
-        const hasConflict = await checkConflictForUpdate(date_resa, heure_debut, heure_fin, reservationId)
+        const hasConflict = await UpdateReservation.checkConflictForUpdate(date_resa, heure_debut, heure_fin, reservationId)
         if (hasConflict) {
             return res.status(409).json({ message: "Créneau déja pris par un collègue." })
         }
@@ -135,7 +135,7 @@ export const UpdateResa = async (req, res) => {
         //Mise à jour , récupération de la fonction du model update() qui met à jour
         // date_resa, heure_debut, heure_fin, objet 
 
-        await Update(reservationId, { dateResa: date_resa, heureDebut: heure_debut, heureFin: heure_fin, objet })
+        await UpdateReservation.update(reservationId, { date_resa, heure_debut, heure_fin, objet })
         res.status(200).json({ message: "Mise à jour réussie" });
 
     } catch (error) {
