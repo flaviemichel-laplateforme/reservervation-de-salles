@@ -1,4 +1,3 @@
-// controllers/auth.controller.js
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model.js';
 // Génère un token JWT
@@ -12,14 +11,25 @@ const generateToken = (utilisateur) => {
 // POST /api/auth/register
 export const register = async (req, res) => {
     try {
-        const { email, password, prenom, nom } = req.body;
-        if (!email || !password || !prenom || !nom) {
+        const { email, password, prenom, nom, confirm_password } = req.body;
+        if (!email || !password || !prenom || !nom || !confirm_password) {
             return res.status(400).json({ error: 'Tous les champs sont requis' });
         }
+
+        //Vérification mail 
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: 'Email ou mot de passe invalide' });
+        }
+
 
         const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
         if (!passwordRegex.test(password)) {
             return res.status(400).json({ error: 'Le mot de passe doit contenir 8 caractères minimum, 1 majuscule et 1 chiffre' });
+        }
+
+        if (password !== confirm_password) {
+            return res.status(400).json({ error: 'Les deux mots de passe doivent correspondre' });
         }
 
         const existingUser = await User.findByEmail(email);

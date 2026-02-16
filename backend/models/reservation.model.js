@@ -1,17 +1,26 @@
 import { query } from '../config/db.js';
 
-const CreateReservation = {
+const Reservation = {
 
-    async checkConflict(date_resa, heure_debut, heure_fin) {
+    //Vérifier si il y a des conflits
+    async checkConflict(date_resa, heure_debut, heure_fin, idToExclude = null) {
 
-        const sql = 'SELECT id FROM reservations WHERE date_resa = ? AND (heure_debut < ? AND heure_fin > ?)';
-        const rows = await query(sql, [date_resa, heure_fin, heure_debut]);
+        let sql = 'SELECT id FROM reservations WHERE date_resa = ? AND (heure_debut < ? AND heure_fin > ?)';
+        const params = [date_resa, heure_fin, heure_debut];
+
+        if (idToExclude) {
+            sql += 'AND  id != ?';
+            params.push(idToExclude);
+        }
+
+        const rows = await query(sql, params);
         return rows.length > 0;
 
     },
 
+
     // Créer une reservation
-    async createResa({ user_id, date_resa, heure_debut, heure_fin, objet }) {
+    async create({ user_id, date_resa, heure_debut, heure_fin, objet }) {
 
         const sql = `INSERT INTO reservations (user_id, date_resa, heure_debut, heure_fin, objet)
 VALUES (?, ?, ?, ?,?)`;
@@ -22,9 +31,11 @@ VALUES (?, ?, ?, ?,?)`;
             heure_fin,
             objet
         ]);
+
         return result.insertId;// Retourne l'ID créé
     },
 
+    // Trouver les information des réservations avec nom et prenom utilisateur 
     async findAll() {
         const sql = `
         SELECT
@@ -43,43 +54,21 @@ VALUES (?, ?, ?, ?,?)`;
         return rows;
     },
 
-
-};
-
-const DeleteReservation = {
-    async deleteById(id, user_id) {
-        const sql = `DELETE FROM reservations WHERE id = ? AND user_id = ?`;
-
-        try {
-            const result = await query(sql, [id, user_id]);
-            return result.affectedRows;
-        } catch (error) {
-            console.error("Erreur lors de la suppression :", error);
-            throw error;
-        }
-    }
-};
-
-
-const UpdateReservation = {
-
-
+    // Trouver réservation par ID
     async findById(id) {
 
-        const sql = 'SELECT * FROM reservations WHERE id = ?';
+        const sql = 'SELECT * FROM reservations WHERE id = ? ';
         const results = await query(sql, [id]);
         return results[0] || null;
-    },
-
-    async checkConflictForUpdate(date_resa, heure_debut, heure_fin, idToExclude) {
-
-        const sql = 'SELECT id FROM reservations WHERE date_resa = ? AND (heure_debut < ? AND heure_fin > ?) AND id != ? --';
-        const rows = await query(sql, [date_resa, heure_fin, heure_debut, idToExclude]);
-        return rows.length > 0;
 
     },
 
-    // Créer une reservation
+    /**
+     * 
+     * @param {id } 
+     * @param {date_resa, heure_debut, heure_fin, objet} param1 
+     * @returns result.affectedRows
+     */
     async update(id, { date_resa, heure_debut, heure_fin, objet }) {
 
         const sql = `UPDATE reservations SET date_resa = ? , heure_debut = ? , heure_fin = ?, objet = ? WHERE id = ?`;
@@ -91,10 +80,19 @@ const UpdateReservation = {
             objet,
             id
         ]);
+
         return result.affectedRows;// Retourne le nombre de lignes modifiées.
     },
+
+    async deleteById(id, user_id) {
+
+        const sql = `DELETE FROM reservations WHERE id = ? AND user_id = ?`;
+
+        const result = await query(sql, [id, user_id]);
+        return result.affectedRows;
+
+    }
 };
 
-
-export { CreateReservation, DeleteReservation, UpdateReservation };
+export default Reservation;
 
