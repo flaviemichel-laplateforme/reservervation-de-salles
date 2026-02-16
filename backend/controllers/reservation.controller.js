@@ -138,8 +138,6 @@ export const UpdateResa = async (req, res) => {
         await Update(reservationId, { dateResa: date_resa, heureDebut: heure_debut, heureFin: heure_fin, objet })
         res.status(200).json({ message: "Mise à jour réussie" });
 
-
-
     } catch (error) {
         console.error("Erreur Controller Update:", error);
         res.status(500).json({ message: "Erreur serveur lors de la mise à jour." });
