@@ -41,8 +41,6 @@ export const authService = {
     }),
 
     getProfile: (id, email, prenom, nom) => fetchAPI('/auth/me', {
-        method: 'GET',
-        body: JSON.stringify({ id, email, prenom, nom })
-
+        method: 'GET'
     })
 };

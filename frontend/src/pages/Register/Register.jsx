@@ -4,8 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
 
 function Register() {
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] = useState('');
+    const [prenom, setPrenom] = useState('');
+    const [nom, setNom] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -18,7 +18,7 @@ function Register() {
         setError('');
         setLoading(true);
         try {
-            await register({ firstname, lastname, email, password });
+            await register({ prenom, nom, email, password });
             navigate('/dashboard', { replace: true });
         } catch (err) {
             setError(err.message || "Erreur lors de l'inscription");
@@ -34,13 +34,13 @@ function Register() {
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Prénom</label>
-                    <input type="text" value={firstname}
-                        onChange={(e) => setFirstname(e.target.value)} required />
+                    <input type="text" value={prenom}
+                        onChange={(e) => setPrenom(e.target.value)} required />
                 </div>
                 <div>
                     <label>Nom</label>
-                    <input type="text" value={lastname}
-                        onChange={(e) => setLastname(e.target.value)} required />
+                    <input type="text" value={nom}
+                        onChange={(e) => setNom(e.target.value)} required />
                 </div>
                 <div>
                     <label>Email</label>
