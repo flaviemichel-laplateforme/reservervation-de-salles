@@ -24,8 +24,9 @@
     background-position: center;
     background-repeat: no-repeat;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    padding: 30px 20px;
     margin: 0;
 }
 
@@ -230,4 +231,40 @@
     text-align: center;
     padding: 40px;
     color: var(--text-muted);
+}
+
+/* =========================================
+   BOUTON RETOUR
+   ========================================= */
+.btn-back {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    background: transparent;
+    color: var(--neon-blue);
+    border: 1px solid var(--neon-blue);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.btn-back:hover {
+    background-color: rgba(56, 189, 248, 0.15);
+    box-shadow: var(--neon-glow);
+    transform: translateX(-4px);
+}
+
+.btn-back .arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.btn-back:hover .arrow {
+    transform: translateX(-4px);
 }
