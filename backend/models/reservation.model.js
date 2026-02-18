@@ -9,7 +9,7 @@ const Reservation = {
         const params = [date_resa, heure_fin, heure_debut];
 
         if (idToExclude) {
-            sql += 'AND  id != ?';
+            sql += ' AND id != ?';
             params.push(idToExclude);
         }
 
