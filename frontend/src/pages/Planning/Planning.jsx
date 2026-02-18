@@ -12,6 +12,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 // Composants réutilisables
 import CreateReservationModal from '../../components/CreateReservationModal/CreateReservationModal';
 import EditReservationModal from '../../components/EditReservationModal/EditReservationModal';
+import ReservationDetailModal from '../../components/ReservationDetailModal/ReservationDetailModal';
 
 import './Planning.css';
 
@@ -44,7 +45,10 @@ function Planning() {
     // États des modales
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingResa, setEditingResa] = useState(null);
+    const [viewingResa, setViewingResa] = useState(null);
     const [defaultDate, setDefaultDate] = useState('');
+    const [defaultHeureDebut, setDefaultHeureDebut] = useState('');
+    const [defaultHeureFin, setDefaultHeureFin] = useState('');
 
     // Transforme les réservations en événements FullCalendar
     // Jaune = à moi, Rouge = aux autres, Gris = passé
@@ -91,83 +95,113 @@ function Planning() {
         });
     }, [reservations, user]);
 
-    // Clic sur un créneau vide → ouvrir la modale de création
+    // Clic sur un créneau vide → ouvrir la modale de création avec les heures pré-remplies
     const handleDateClick = useCallback((info) => {
         const clickedDate = new Date(info.dateStr);
         if (clickedDate < new Date()) return;
-        setDefaultDate(info.dateStr.split('T')[0]);
+
+        // Extraire la date depuis l'objet Date local (évite le décalage UTC)
+        const year = clickedDate.getFullYear();
+        const month = (clickedDate.getMonth() + 1).toString().padStart(2, '0');
+        const day = clickedDate.getDate().toString().padStart(2, '0');
+        setDefaultDate(`${year}-${month}-${day}`);
+
+        // Extraire l'heure du créneau cliqué (ex: "2026-02-18T10:00:00" → "10:00")
+        const hours = clickedDate.getHours().toString().padStart(2, '0');
+        const minutes = clickedDate.getMinutes().toString().padStart(2, '0');
+        setDefaultHeureDebut(`${hours}:${minutes}`);
+
+        // Heure de fin = +1h par défaut (correspond au slot de 1h)
+        const endHour = (clickedDate.getHours() + 1).toString().padStart(2, '0');
+        setDefaultHeureFin(`${endHour}:${minutes}`);
+
         setIsModalOpen(true);
     }, []);
 
-    // Clic sur un événement → modifier seulement les miens et non passés
+    // Clic sur un événement → ouvrir le détail
     const handleEventClick = useCallback((info) => {
         const resa = info.event.extendedProps;
-        if (!resa.isMine || resa.isPast) return;
-        setEditingResa(resa);
+        setViewingResa(resa);
     }, []);
 
     if (loading) return <div className="planning-loading">Chargement du calendrier...</div>;
 
     return (
-        <div className="planning-wrapper">
-            <header className="planning-header">
-                <button className="btn-back" onClick={() => navigate(-1)}>
-                    <span className="arrow">←</span> Retour
-                </button>
-                <div className="planning-legend">
-                    <span className="legend-item legend-mine">■ Mes réservations</span>
-                    <span className="legend-item legend-other">■ Occupé</span>
-                    <span className="legend-item legend-past">■ Passé</span>
+        <div className="planning-page">
+            <div className="planning-wrapper">
+                <header className="planning-header">
+                    <button className="btn-back" onClick={() => navigate(-1)}>
+                        <span className="arrow">←</span> Retour
+                    </button>
+                    <div className="planning-legend">
+                        <span className="legend-item legend-mine">■ Mes réservations</span>
+                        <span className="legend-item legend-other">■ Occupé</span>
+                        <span className="legend-item legend-past">■ Passé</span>
+                    </div>
+                    <button className="btn-primary" onClick={() => { setDefaultDate(''); setDefaultHeureDebut(''); setDefaultHeureFin(''); setIsModalOpen(true); }}>
+                        + Nouvelle Réservation
+                    </button>
+                </header>
+
+                <div className="calendar-fullcalendar">
+                    <FullCalendar
+                        ref={calendarRef}
+                        plugins={PLUGINS}
+                        initialView="timeGridWeek"
+                        locale="fr"
+                        headerToolbar={HEADER_TOOLBAR}
+                        buttonText={BUTTON_TEXT}
+                        weekends={false}
+                        firstDay={1}
+                        slotMinTime="08:00:00"
+                        slotMaxTime="20:00:00"
+                        slotDuration="01:00:00"
+                        slotLabelInterval="01:00:00"
+                        slotLabelFormat={SLOT_LABEL_FORMAT}
+                        nowIndicator={true}
+                        validRange={VALID_RANGE}
+                        events={events}
+                        dateClick={handleDateClick}
+                        eventClick={handleEventClick}
+                        editable={false}
+                        selectable={true}
+                        height="auto"
+                        allDaySlot={false}
+                    />
                 </div>
-                <button className="btn-primary" onClick={() => { setDefaultDate(''); setIsModalOpen(true); }}>
-                    + Nouvelle Réservation
-                </button>
-            </header>
 
-            <div className="calendar-fullcalendar">
-                <FullCalendar
-                    ref={calendarRef}
-                    plugins={PLUGINS}
-                    initialView="timeGridWeek"
-                    locale="fr"
-                    headerToolbar={HEADER_TOOLBAR}
-                    buttonText={BUTTON_TEXT}
-                    weekends={false}
-                    firstDay={1}
-                    slotMinTime="08:00:00"
-                    slotMaxTime="19:00:00"
-                    slotDuration="01:00:00"
-                    slotLabelInterval="01:00:00"
-                    slotLabelFormat={SLOT_LABEL_FORMAT}
-                    nowIndicator={true}
-                    validRange={VALID_RANGE}
-                    events={events}
-                    dateClick={handleDateClick}
-                    eventClick={handleEventClick}
-                    editable={false}
-                    selectable={true}
-                    height="auto"
-                    allDaySlot={false}
-                />
+                {/* Modale de création */}
+                {isModalOpen && (
+                    <CreateReservationModal
+                        onClose={() => setIsModalOpen(false)}
+                        onSave={addReservation}
+                        defaultDate={defaultDate}
+                        defaultHeureDebut={defaultHeureDebut}
+                        defaultHeureFin={defaultHeureFin}
+                    />
+                )}
+
+                {/* Modale de détail */}
+                {viewingResa && (
+                    <ReservationDetailModal
+                        reservation={viewingResa}
+                        isMine={viewingResa.isMine}
+                        isPast={viewingResa.isPast}
+                        onClose={() => setViewingResa(null)}
+                        onEdit={(resa) => { setViewingResa(null); setEditingResa(resa); }}
+                        onDelete={(id) => { setViewingResa(null); removeReservation(id); }}
+                    />
+                )}
+
+                {/* Modale de modification */}
+                {editingResa && (
+                    <EditReservationModal
+                        reservation={editingResa}
+                        onClose={() => setEditingResa(null)}
+                        onSave={modifyReservation}
+                    />
+                )}
             </div>
-
-            {/* Modale de création */}
-            {isModalOpen && (
-                <CreateReservationModal
-                    onClose={() => setIsModalOpen(false)}
-                    onSave={addReservation}
-                    defaultDate={defaultDate}
-                />
-            )}
-
-            {/* Modale de modification */}
-            {editingResa && (
-                <EditReservationModal
-                    reservation={editingResa}
-                    onClose={() => setEditingResa(null)}
-                    onSave={modifyReservation}
-                />
-            )}
         </div>
     );
 }

@@ -56,6 +56,13 @@ VALUES (?, ?, ?, ?,?)`;
     },
 
     // Trouver réservation par ID
+    async findById(id) {
+        const sql = 'SELECT * FROM reservations WHERE id = ?';
+        const results = await query(sql, [id]);
+        return results[0] || null;
+    },
+
+    // Trouver les réservations d'un utilisateur
     async findByUserId(id) {
 
         const sql = 'SELECT * FROM reservations WHERE user_id = ? ';

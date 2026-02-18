@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
 const EditReservationModal = ({ reservation, onClose, onSave }) => {
-    // On formate la date pour que l'input HTML la comprenne (YYYY-MM-DD)
-    // T00:00:00 évite le décalage UTC
-    const formattedDate = new Date(reservation.date_resa + 'T00:00:00').toISOString().split('T')[0];
+    // On extrait directement la date au format YYYY-MM-DD (sans passer par toISOString qui décale en UTC)
+    const formattedDate = reservation.date_resa.split('T')[0];
 
     // Le formulaire est pré-rempli avec les infos de la réunion cliquée
     const [formData, setFormData] = useState({

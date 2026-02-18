@@ -14,11 +14,21 @@
 /* =========================================
    LAYOUT GLOBAL
    ========================================= */
+.planning-page {
+    min-height: 100vh;
+    background-image: url('/assets/img/fond.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: 40px 0;
+}
+
 .planning-wrapper {
     max-width: 1100px;
-    margin: 40px auto;
+    margin: 0 auto;
     padding: 0 20px;
-    color: #000;
+    color: #fff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -63,10 +73,10 @@
 /* --- BOUTONS --- */
 .btn-back {
     background: transparent;
-    color: #555;
-    border: 1px solid #ccc;
+    color: rgba(255, 255, 255, 0.7);
+    border: 1.5px solid rgba(0, 170, 255, 0.4);
     padding: 8px 16px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
     display: flex;
@@ -76,8 +86,9 @@
 }
 
 .btn-back:hover {
-    color: var(--neon-blue);
-    border-color: var(--neon-blue);
+    color: #fff;
+    border-color: rgba(0, 170, 255, 0.8);
+    box-shadow: 0 0 10px rgba(0, 170, 255, 0.3);
 }
 
 .btn-back:hover .arrow {
@@ -85,30 +96,37 @@
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--neon-blue), #2563eb);
+    background: linear-gradient(135deg, rgba(0, 170, 255, 0.3), rgba(37, 99, 235, 0.4));
     color: #fff;
     padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
+    border: 1.5px solid rgba(0, 170, 255, 0.5);
+    border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    box-shadow: 0 0 12px rgba(0, 170, 255, 0.25);
     transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-    filter: brightness(1.2);
-    box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    background: linear-gradient(135deg, rgba(0, 170, 255, 0.45), rgba(37, 99, 235, 0.55));
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.4);
+    transform: translateY(-1px);
 }
 
 /* =========================================
    FULLCALENDAR - PERSONNALISATION
    ========================================= */
 .calendar-fullcalendar {
-    background: #fff;
-    border-radius: 12px;
+    background: rgba(10, 50, 70, 0.18);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 2px solid rgba(0, 170, 255, 0.4);
+    border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow:
+        0 0 15px rgba(0, 170, 255, 0.25),
+        0 0 40px rgba(0, 170, 255, 0.1),
+        inset 0 0 30px rgba(0, 170, 255, 0.05);
 }
 
 /* Boutons de navigation */
@@ -138,13 +156,39 @@
 .fc .fc-toolbar-title {
     font-size: 1.4rem;
     font-weight: 700;
-    color: #1e293b;
+    color: #fff;
     text-transform: capitalize;
+    text-shadow: 0 0 8px rgba(0, 170, 255, 0.4);
 }
 
-/* Jour actuel mis en évidence */
+/* Jour actuel mis en évidence — effet néon bleu */
 .fc .fc-day-today {
-    background-color: rgba(56, 189, 248, 0.08) !important;
+    background-color: rgba(0, 170, 255, 0.1) !important;
+}
+
+.fc .fc-col-header-cell.fc-day-today {
+    background: linear-gradient(135deg, rgba(0, 170, 255, 0.3), rgba(37, 99, 235, 0.4)) !important;
+    border: 2px solid rgba(0, 170, 255, 0.8) !important;
+    box-shadow:
+        0 0 12px rgba(0, 170, 255, 0.5),
+        0 0 30px rgba(0, 170, 255, 0.3),
+        0 0 50px rgba(0, 170, 255, 0.15),
+        inset 0 0 20px rgba(0, 170, 255, 0.2);
+}
+
+.fc .fc-col-header-cell.fc-day-today .fc-col-header-cell-cushion {
+    color: #fff;
+    text-shadow:
+        0 0 8px rgba(0, 170, 255, 0.8),
+        0 0 20px rgba(0, 170, 255, 0.5);
+    font-weight: 700;
+}
+
+.fc .fc-timegrid-col.fc-day-today {
+    background-color: rgba(0, 170, 255, 0.06) !important;
+    border-left: 2px solid rgba(0, 170, 255, 0.5) !important;
+    border-right: 2px solid rgba(0, 170, 255, 0.5) !important;
+    box-shadow: inset 0 0 25px rgba(0, 170, 255, 0.04);
 }
 
 /* =========================================
@@ -189,12 +233,11 @@
 
 /* Réservations des autres — Rouge */
 .fc .event-other {
-    cursor: default;
+    cursor: pointer;
 }
 
 .fc .event-other:hover {
-    transform: none;
-    box-shadow: none;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
 }
 
 /* Créneaux passés — Gris */
@@ -217,15 +260,61 @@
 }
 
 .fc .fc-timegrid-slot:hover {
-    background-color: rgba(56, 189, 248, 0.04);
+    background-color: rgba(0, 170, 255, 0.05);
 }
 
-/* Créneaux passés grisés via le slot */
+/* Créneaux passés grisés */
 .fc .fc-timegrid-col.fc-day-past {
-    background-color: #f8f9fa;
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* =========================================
+   THÈME SOMBRE — Grille & en-têtes
+   ========================================= */
+.fc th,
+.fc td {
+    border-color: rgba(0, 170, 255, 0.2) !important;
+    border-width: 2px !important;
+}
+
+/* Lignes horizontales des heures pleines — plus visibles */
+.fc .fc-timegrid-slot.fc-timegrid-slot-lane {
+    border-top: 2px solid rgba(0, 170, 255, 0.35) !important;
+}
+
+/* Séparations verticales entre jours */
+.fc .fc-timegrid-col {
+    border-right: 2px solid rgba(0, 170, 255, 0.3) !important;
+}
+
+.fc .fc-col-header-cell {
+    background: rgba(5, 20, 45, 0.85);
+    color: #fff;
+    font-weight: 600;
+    border-bottom: 2px solid rgba(0, 170, 255, 0.4) !important;
+}
+
+.fc .fc-col-header-cell-cushion {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+}
+
+.fc .fc-timegrid-slot-label-cushion {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.fc .fc-scrollgrid {
+    border-color: rgba(0, 170, 255, 0.3) !important;
+    border-width: 2px !important;
 }
 
 /* Loading */
+.planning-loading {
+    text-align: center;
+    padding: 60px;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+}/* Loading */
 .planning-loading {
     text-align: center;
     padding: 60px;

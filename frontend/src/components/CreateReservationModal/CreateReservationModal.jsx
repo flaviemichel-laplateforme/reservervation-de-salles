@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-const CreateReservationModal = ({ onClose, onSave, defaultDate = '' }) => {
-    // Le formulaire est pré-rempli avec la date cliquée sur le calendrier
+const CreateReservationModal = ({ onClose, onSave, defaultDate = '', defaultHeureDebut = '', defaultHeureFin = '' }) => {
+    // Le formulaire est pré-rempli avec la date et les heures du créneau cliqué
     const [formData, setFormData] = useState({
         objet: '',
         date_resa: defaultDate,
-        heure_debut: '',
-        heure_fin: ''
+        heure_debut: defaultHeureDebut,
+        heure_fin: defaultHeureFin
     });
 
     const handleChange = (e) => {

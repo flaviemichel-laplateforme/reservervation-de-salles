@@ -7,7 +7,8 @@ const pool = mysql.createPool({
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'techspace_db',
     waitForConnections: true,
-    connectionLimit: 10
+    connectionLimit: 10,
+    dateStrings: true          // Renvoie les dates en string ("2026-02-27") au lieu d'objets Date (évite le décalage UTC)
 });
 // Fonction utilitaire pour les requêtes
 export async function query(sql, params = []) {
