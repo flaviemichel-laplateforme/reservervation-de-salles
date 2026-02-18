@@ -1,8 +1,10 @@
 // components/Footer.jsx
+import './Footer.css';
+
 function Footer() {
     return (
         <footer>
-            <p>Starter Kit - © {new Date().getFullYear()} La Plateforme_</p>
+            <p>Réservation de salles © {new Date().getFullYear()}  Michel Flavie</p>
         </footer>
     );
 }

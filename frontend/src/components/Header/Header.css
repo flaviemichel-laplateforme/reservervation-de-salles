@@ -1,0 +1,47 @@
+/* Le conteneur principal : flex horizontal, espace entre nav et div */
+header {
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+/* Les liens de navigation alignés horizontalement */
+header nav {
+    display: flex;
+    gap: 15px;
+}
+
+/* Style des liens */
+header a {
+    color: white;
+    text-decoration: none;
+}
+
+header a:hover {
+    color: #38bdf8;
+}
+
+/* Bouton déconnexion */
+header button {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+header button:hover {
+    background: white;
+    color: black;
+}
+
+/* Bloc droite (prénom + bouton) */
+header div {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}

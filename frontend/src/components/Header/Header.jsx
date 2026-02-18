@@ -1,6 +1,7 @@
 // components/Header.jsx
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
+import './Header.css';
 
 function Header() {
     const { user, isAuthenticated, logout } = useAuth();
@@ -13,8 +14,8 @@ function Header() {
         <header>
 
             <nav>
-                <NavLink to="/">Accueil | </NavLink>
-                {isAuthenticated && <NavLink to="/planning">Planning | </NavLink>}
+                <NavLink to="/">Accueil</NavLink>
+                {isAuthenticated && <NavLink to="/planning">Planning</NavLink>}
                 {isAuthenticated && <NavLink to="/profile">Mon profil</NavLink>}
             </nav>
             <div>
