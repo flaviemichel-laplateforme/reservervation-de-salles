@@ -268,3 +268,99 @@
 .btn-back:hover .arrow {
     transform: translateX(-4px);
 }
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+/* Tablette */
+@media (max-width: 900px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .profile-header {
+        flex-direction: row;
+        text-align: left;
+        gap: 20px;
+    }
+
+    .avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 1.8rem;
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .profile-page {
+        padding: 15px 10px;
+    }
+
+    .profile-container {
+        margin: 15px auto;
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+
+    .avatar {
+        width: 70px;
+        height: 70px;
+        font-size: 1.5rem;
+        border-radius: 12px;
+    }
+
+    .user-info h2 {
+        font-size: 1rem;
+    }
+
+    .user-email {
+        font-size: 0.8rem;
+    }
+
+    .reservations-section {
+        padding: 15px;
+    }
+
+    .section-title h3 {
+        font-size: 0.95rem;
+    }
+
+    .reservation-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 15px;
+    }
+
+    .card-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .card-actions button {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+
+    .resa-objet {
+        font-size: 1rem;
+    }
+
+    .btn-back {
+        padding: 8px 14px;
+        font-size: 0.8rem;
+    }
+}

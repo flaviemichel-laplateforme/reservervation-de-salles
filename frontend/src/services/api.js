@@ -17,7 +17,7 @@ export async function fetchAPI(endpoint, options = {}) {
         });
         const data = await response.json();
         if (!response.ok) {
-            throw { status: response.status, message: data.error || 'Erreur' };
+            throw { status: response.status, message: data.message || data.error || 'Erreur' };
         }
         return data;
 
